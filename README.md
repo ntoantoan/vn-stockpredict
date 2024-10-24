@@ -42,7 +42,7 @@ The project uses a PostgreSQL database with a `companies` table to store stock i
 ## Chart Example
 ![Chart Example](app/src/chart/screenshot.jpg)
 
-"""
+
 {
   "tldr": "Xu hướng **đi ngang** với **phạm vi giao dịch** từ **25.50** đến **29.00**. Nến gần đây có **biến động mạnh**, ghi nhận một số **biến động giá** gần **26.75**. Động lượng khối lượng **giảm** có thể thiếu động lực cho một biến động lớn hơn.",
   "xu_huong_hien_tai": "Đi ngang, **25.50** - **29.00**",
@@ -66,7 +66,7 @@ The project uses a PostgreSQL database with a `companies` table to store stock i
     "kich_ban_ban": "Nếu giá tăng tới gần **29.00**, xem xét **bán** nếu khối lượng tăng với **dừng lỗ** đặt tại **30.00** để tận dụng mức **kháng cự mạnh**."
   }
 }
-"""
+
 ## Contributing
 Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
 
