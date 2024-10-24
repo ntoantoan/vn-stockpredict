@@ -50,3 +50,32 @@ async def analyze_chart_stream(base64_image: str, model: str = "gpt-4o-mini", us
         yield f"data: {json.dumps({'full_response': json.loads(full_reply_content)})}\n\n"
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+async def analyze_chart_non_stream(base64_image: str, model: str = "gpt-4o-mini"):
+    if model == "gpt-4o-mini":
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY_MINI"))
+    else:
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY_4O"))
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "user", "content": [
+            {
+            "type": "text",
+            "text": prompt_analysis
+            },
+            {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/jpeg;base64,{base64_image}"
+            }
+            }
+        ]}
+        ],
+        max_tokens=4096,
+        response_format={"type": "json_object"},
+    )
+
+    return json.loads(response.choices[0].message.content)

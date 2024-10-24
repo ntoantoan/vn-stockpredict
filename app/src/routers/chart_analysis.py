@@ -11,8 +11,8 @@ from pydantic import BaseModel
 
 from ..chart.get_chart_from_vndirect import ChartScreenshotCapture
 from ..database import Database
-from ..services.analyze_chart_stream import analyze_chart_stream
-
+from ..services.analyze_chart import analyze_chart_stream
+from ..services.analyze_chart import analyze_chart_non_stream
 db = Database()
 
 # chart_capture = ChartScreenshotCapture("HPG")
@@ -38,7 +38,7 @@ class User(BaseModel):
 
 class ChartAnalysisRequest(BaseModel):
     base64_image: str
-    model: str = "gpt-4-0613"
+    model: str = "gpt-4o"
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -94,6 +94,21 @@ async def analyze_chart_endpoint(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+#generate non streaming
+@router.post("/analyze-chart-non-stream")
+async def analyze_chart_non_stream_endpoint(
+    request: Request,
+    chart_request: ChartAnalysisRequest
+):
+    client_ip = request.client.host
+    check_rate_limit(client_ip)
+    
+
+    # Assuming you have a non-streaming version of analyze_chart function
+    print(chart_request.model)
+    result = await analyze_chart_non_stream(chart_request.base64_image, model=chart_request.model)
+    return JSONResponse(content=result)
+
 @router.get("/get-chart/{symbol}")
 async def get_chart_endpoint(symbol: str, current_user: User = Depends(get_current_user)):
     chart_capture = ChartScreenshotCapture(symbol)
